@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace System.Windows.Forms.DockPanel
 {
@@ -12,11 +13,9 @@ namespace System.Windows.Forms.DockPanel
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]        
         protected internal class Tab : IDisposable
         {
-            private IDockContent m_content;
-
             public Tab(IDockContent content)
             {
-                m_content = content;
+                Content = content;
             }
 
             ~Tab()
@@ -24,15 +23,9 @@ namespace System.Windows.Forms.DockPanel
                 Dispose(false);
             }
 
-            public IDockContent Content
-            {
-                get { return m_content; }
-            }
+            public IDockContent Content { get; }
 
-            public Form ContentForm
-            {
-                get { return m_content as Form; }
-            }
+            public Form ContentForm => Content as Form;
 
             public void Dispose()
             {
@@ -64,19 +57,12 @@ namespace System.Windows.Forms.DockPanel
 
             internal TabCollection(DockPane pane)
             {
-                m_dockPane = pane;
+                DockPane = pane;
             }
 
-            private DockPane m_dockPane;
-            public DockPane DockPane
-            {
-                get { return m_dockPane; }
-            }
+            public DockPane DockPane { get; }
 
-            public int Count
-            {
-                get { return DockPane.DisplayingContents.Count; }
-            }
+            public int Count => DockPane.DisplayingContents.Count;
 
             public Tab this[int index]
             {
@@ -84,19 +70,19 @@ namespace System.Windows.Forms.DockPanel
                 {
                     IDockContent content = DockPane.DisplayingContents[index];
                     if (content == null)
-                        throw (new ArgumentOutOfRangeException("index"));
+                        throw new ArgumentOutOfRangeException(nameof(index));
                     return content.DockHandler.GetTab(DockPane.TabStripControl);
                 }
             }
 
             public bool Contains(Tab tab)
             {
-                return (IndexOf(tab) != -1);
+                return IndexOf(tab) != -1;
             }
 
             public bool Contains(IDockContent content)
             {
-                return (IndexOf(content) != -1);
+                return IndexOf(content) != -1;
             }
 
             public int IndexOf(Tab tab)
@@ -146,7 +132,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected int HitTest()
         {
-            return HitTest(PointToClient(Control.MousePosition));
+            return HitTest(PointToClient(MousePosition));
         }
 
         protected internal abstract int HitTest(Point point);
@@ -191,8 +177,8 @@ namespace System.Windows.Forms.DockPanel
             if (e.Button == MouseButtons.Left)
             {
                 var dragSize = SystemInformation.DragSize;
-                _dragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2),
-                                                e.Y - (dragSize.Height / 2)), dragSize);
+                _dragBox = new Rectangle(new Point(e.X - dragSize.Width / 2,
+                                                e.Y - dragSize.Height / 2), dragSize);
             }
         }
 
@@ -210,10 +196,7 @@ namespace System.Windows.Forms.DockPanel
                 DockPane.DockPanel.BeginDrag(DockPane.ActiveContent.DockHandler);
         }
 
-        protected bool HasTabPageContextMenu
-        {
-            get { return DockPane.HasTabPageContextMenu; }
-        }
+        protected bool HasTabPageContextMenu => DockPane.HasTabPageContextMenu;
 
         protected void ShowTabPageContextMenu(Point position)
         {
@@ -291,7 +274,7 @@ namespace System.Windows.Forms.DockPanel
 
         public class DockPaneStripAccessibleObject : ControlAccessibleObject
         {
-            private DockPaneStripBase _strip;
+            private readonly DockPaneStripBase _strip;
 
             public DockPaneStripAccessibleObject(DockPaneStripBase strip)
                 : base(strip)
@@ -299,13 +282,7 @@ namespace System.Windows.Forms.DockPanel
                 _strip = strip;
             }
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.PageTabList;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.PageTabList;
 
             public override int GetChildCount()
             {
@@ -319,48 +296,27 @@ namespace System.Windows.Forms.DockPanel
 
             public override AccessibleObject HitTest(int x, int y)
             {
-                Point point = new Point(x, y);
-                foreach (Tab tab in _strip.Tabs)
-                {
-                    Rectangle rectangle = _strip.GetTabBounds(tab);
-                    if (ToScreen(rectangle, _strip).Contains(point))
-                        return new DockPaneStripTabAccessibleObject(_strip, tab, this);
-                }
-
-                return null;
+                var point = new Point(x, y);
+                return (from tab in _strip.Tabs let rectangle = _strip.GetTabBounds(tab) where ToScreen(rectangle, _strip).Contains(point) select new DockPaneStripTabAccessibleObject(_strip, tab, this)).FirstOrDefault();
             }
         }
 
         protected class DockPaneStripTabAccessibleObject : AccessibleObject
         {
-            private DockPaneStripBase _strip;
-            private Tab _tab;
-
-            private AccessibleObject _parent;
+            private readonly DockPaneStripBase _strip;
+            private readonly Tab _tab;
 
             internal DockPaneStripTabAccessibleObject(DockPaneStripBase strip, Tab tab, AccessibleObject parent)
             {
                 _strip = strip;
                 _tab = tab;
 
-                _parent = parent;
+                Parent = parent;
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
+            public override AccessibleObject Parent { get; }
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.PageTab;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.PageTab;
 
             public override Rectangle Bounds
             {

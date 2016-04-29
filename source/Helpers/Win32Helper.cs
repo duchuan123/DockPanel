@@ -4,9 +4,7 @@ namespace System.Windows.Forms.DockPanel
 {
     public static class Win32Helper
     {
-        private static readonly bool _isRunningOnMono = Type.GetType("Mono.Runtime") != null;
-
-        public static bool IsRunningOnMono { get { return _isRunningOnMono; } }
+        public static bool IsRunningOnMono { get; } = Type.GetType("Mono.Runtime") != null;
 
         internal static Control ControlAtPoint(Point pt)
         {

@@ -39,14 +39,6 @@ namespace System.Windows.Forms.DockPanel
         Bottom
     }
 
-    public enum DocumentStyle
-    {
-        DockingMdi,
-        DockingWindow,
-        DockingSdi,
-        SystemMdi,
-    }
-
     /// <summary>
     /// The location to draw the DockPaneStrip for Document style windows.
     /// </summary>

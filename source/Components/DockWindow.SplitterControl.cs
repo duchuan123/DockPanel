@@ -4,18 +4,13 @@ namespace System.Windows.Forms.DockPanel
     {
         internal class DefaultSplitterControl : SplitterBase
         {
-            protected override int SplitterSize
-            {
-                get { return Measures.SplitterSize; }
-            }
+            protected override int SplitterSize => Measures.SplitterSize;
 
             protected override void StartDrag()
             {
-                DockWindow window = Parent as DockWindow;
-                if (window == null)
-                    return;
+                var window = Parent as DockWindow;
 
-                window.DockPanel.BeginDrag(window, window.RectangleToScreen(Bounds));
+                window?.DockPanel.BeginDrag(window, window.RectangleToScreen(Bounds));
             }
         }
     }

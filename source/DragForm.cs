@@ -52,10 +52,8 @@ namespace System.Windows.Forms.DockPanel
         }
 
         //The form can be still activated by explicity calling Activate
-        protected override bool ShowWithoutActivation
-        {
-            get { return true; }
-        }
+        protected override bool ShowWithoutActivation => true;
+
         public virtual void Show(bool bActivate)
         {
                 Show();

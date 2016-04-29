@@ -61,22 +61,19 @@ namespace System.Windows.Forms.DockPanel
             if (colorTransparent == Color.Empty)
                 colorTransparent = bitmap.GetPixel(0, 0); 
 
-            for(int row = 0; row < bitmap.Height; row ++) 
-            { 
-                int colOpaquePixel;
-                for(int col = 0; col < bitmap.Width; col ++) 
-                { 
-                    if(bitmap.GetPixel(col, row) != colorTransparent) 
-                    { 
-                        colOpaquePixel = col; 
-                        int colNext; 
-                        for(colNext = colOpaquePixel; colNext < bitmap.Width; colNext ++) 
-                            if(bitmap.GetPixel(colNext, row) == colorTransparent) 
-                                break;
+            for(var row = 0; row < bitmap.Height; row ++) 
+            {
+                for(var col = 0; col < bitmap.Width; col ++) 
+                {
+                    if (bitmap.GetPixel(col, row) == colorTransparent) continue;
+                    var colOpaquePixel = col; 
+                    int colNext; 
+                    for(colNext = colOpaquePixel; colNext < bitmap.Width; colNext ++) 
+                        if(bitmap.GetPixel(colNext, row) == colorTransparent) 
+                            break;
  
-                        graphicsPath.AddRectangle(new Rectangle(colOpaquePixel, row, colNext - colOpaquePixel, 1)); 
-                        col = colNext; 
-                    } 
+                    graphicsPath.AddRectangle(new Rectangle(colOpaquePixel, row, colNext - colOpaquePixel, 1)); 
+                    col = colNext;
                 } 
             } 
             return graphicsPath; 

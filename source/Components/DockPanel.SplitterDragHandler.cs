@@ -10,18 +10,14 @@ namespace System.Windows.Forms.DockPanel
             {
                 public SplitterOutline()
                 {
-                    m_dragForm = new DragForm();
+                    DragForm = new DragForm();
                     SetDragForm(Rectangle.Empty);
                     DragForm.BackColor = Color.Black;
                     DragForm.Opacity = 0.7;
                     DragForm.Show(false);
                 }
 
-                DragForm m_dragForm;
-                private DragForm DragForm
-                {
-                    get { return m_dragForm; }
-                }
+                private DragForm DragForm { get; }
 
                 public void Show(Rectangle rect)
                 {
@@ -48,25 +44,15 @@ namespace System.Windows.Forms.DockPanel
             {
             }
 
-            public new ISplitterDragSource DragSource
+            private new ISplitterDragSource DragSource
             {
                 get { return base.DragSource as ISplitterDragSource; }
-                private set { base.DragSource = value; }
+                set { base.DragSource = value; }
             }
 
-            private SplitterOutline m_outline;
-            private SplitterOutline Outline
-            {
-                get { return m_outline; }
-                set { m_outline = value; }
-            }
+            private SplitterOutline Outline { get; set; }
 
-            private Rectangle m_rectSplitter;
-            private Rectangle RectSplitter
-            {
-                get { return m_rectSplitter; }
-                set { m_rectSplitter = value; }
-            }
+            private Rectangle RectSplitter { get; set; }
 
             public void BeginDrag(ISplitterDragSource dragSource, Rectangle rectSplitter)
             {
@@ -86,7 +72,7 @@ namespace System.Windows.Forms.DockPanel
 
             protected override void OnDragging()
             {
-                Outline.Show(GetSplitterOutlineBounds(Control.MousePosition));
+                Outline.Show(GetSplitterOutlineBounds(MousePosition));
             }
 
             protected override void OnEndDrag(bool abort)
@@ -96,7 +82,7 @@ namespace System.Windows.Forms.DockPanel
                 Outline.Close();
 
                 if (!abort)
-                    DragSource.MoveSplitter(GetMovingOffset(Control.MousePosition));
+                    DragSource.MoveSplitter(GetMovingOffset(MousePosition));
 
                 DragSource.EndDrag();
                 DockPanel.ResumeLayout(true, true);
@@ -143,12 +129,10 @@ namespace System.Windows.Forms.DockPanel
             }
         }
 
-        private SplitterDragHandler m_splitterDragHandler;
+        private SplitterDragHandler _mSplitterDragHandler;
         private SplitterDragHandler GetSplitterDragHandler()
         {
-            if (m_splitterDragHandler == null)
-                m_splitterDragHandler = new SplitterDragHandler(this);
-            return m_splitterDragHandler;
+            return _mSplitterDragHandler ?? (_mSplitterDragHandler = new SplitterDragHandler(this));
         }
 
         public void BeginDrag(ISplitterDragSource dragSource, Rectangle rectSplitter)

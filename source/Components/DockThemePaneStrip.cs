@@ -41,7 +41,7 @@ namespace System.Windows.Forms.DockPanel
             private int _mImageCategory;
             public int ImageCategory
             {
-                get { return _mImageCategory; }
+                private get { return _mImageCategory; }
                 set
                 {
                     if (_mImageCategory == value)
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.DockPanel
 
         private int MeasureHeight_Document()
         {
-            int height = Math.Max(TextFont.Height + DocumentTabGapTop,
+            var height = Math.Max(TextFont.Height + DocumentTabGapTop,
                 ButtonClose.Height + DocumentButtonGapTop + DocumentButtonGapBottom)
                 + DocumentStripGapBottom + DocumentStripGapTop;
 
@@ -412,8 +412,8 @@ namespace System.Windows.Forms.DockPanel
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Rectangle rect = TabsRectangle;
-            DockPanelGradient gradient = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient;
+            var rect = TabsRectangle;
+            var gradient = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient;
             if (Appearance == DockPane.AppearanceStyle.Document)
             {
                 rect.X -= DocumentTabGapLeft;
@@ -567,7 +567,7 @@ namespace System.Windows.Forms.DockPanel
             // If any tab width not set yet, set it to the average width
             if (remainedTabs > 0)
             {
-                int roundUpWidth = (totalWidth - totalAllocatedWidth) - (averageWidth * remainedTabs);
+                int roundUpWidth = totalWidth - totalAllocatedWidth - averageWidth * remainedTabs;
                 foreach (var tab1 in Tabs)
                 {
                     var tab = (TabVS2005) tab1;
@@ -819,7 +819,7 @@ namespace System.Windows.Forms.DockPanel
         {
             Rectangle rectTabStrip = TabStripRectangle;
 
-            TabVS2005 tab = (TabVS2005)(Tabs[index]);
+            TabVS2005 tab = (TabVS2005)Tabs[index];
             return new Rectangle(tab.TabX, rectTabStrip.Y, tab.TabWidth, rectTabStrip.Height);
         }
 
@@ -989,9 +989,7 @@ namespace System.Windows.Forms.DockPanel
                 }
             }
 
-            if (Tabs.IndexOf(tab) != EndDisplayingTab &&
-                (Tabs.IndexOf(tab) != Tabs.Count - 1 && Tabs[Tabs.IndexOf(tab) + 1].Content == DockPane.ActiveContent)
-                && !full)
+            if (Tabs.IndexOf(tab) != EndDisplayingTab && Tabs.IndexOf(tab) != Tabs.Count - 1 && Tabs[Tabs.IndexOf(tab) + 1].Content == DockPane.ActiveContent && !full)
             {
                 if (RightToLeft == RightToLeft.Yes)
                 {
@@ -1283,7 +1281,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected override void OnMouseHover(EventArgs e)
         {
-            int index = HitTest(PointToClient(Control.MousePosition));
+            int index = HitTest(PointToClient(MousePosition));
             string toolTip = string.Empty;
 
             base.OnMouseHover(e);

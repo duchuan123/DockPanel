@@ -6,16 +6,10 @@ namespace System.Windows.Forms.DockPanel
     {
         private static ResourceManager _resourceManager;
 
-        private static ResourceManager ResourceManager
-        {
-            get
-            {
-                if (_resourceManager == null)
-                    _resourceManager = new ResourceManager("System.Windows.Forms.DockPanel.Strings", typeof(ResourceHelper).Assembly);
-                return _resourceManager;
-            }
-
-        }
+        private static ResourceManager ResourceManager => _resourceManager ??
+                                                          (_resourceManager =
+                                                              new ResourceManager("System.Windows.Forms.DockPanel.Strings",
+                                                                  typeof (ResourceHelper).Assembly));
 
         public static string GetString(string name)
         {

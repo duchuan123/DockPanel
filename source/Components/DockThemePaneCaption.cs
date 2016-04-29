@@ -327,7 +327,7 @@ namespace System.Windows.Forms.DockPanel
 
         private void Options_Click(object sender, EventArgs e)
         {
-            ShowTabPageContextMenu(PointToClient(Control.MousePosition));
+            ShowTabPageContextMenu(PointToClient(MousePosition));
         }
 
         protected override void OnRightToLeftChanged(EventArgs e)

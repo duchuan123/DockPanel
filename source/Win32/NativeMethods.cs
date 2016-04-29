@@ -19,19 +19,19 @@ namespace System.Windows.Forms.DockPanel
 
         [DllImport("User32.dll", CharSet=CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(IntPtr hWnd, int Msg, uint wParam, uint lParam);
+        public static extern bool PostMessage(IntPtr hWnd, int msg, uint wParam, uint lParam);
 
         [DllImport("User32.dll", CharSet=CharSet.Auto)]
-        public static extern uint SendMessage(IntPtr hWnd, int Msg, uint wParam, uint lParam);
+        public static extern uint SendMessage(IntPtr hWnd, int msg, uint wParam, uint lParam);
 
         [DllImport("User32.dll", CharSet=CharSet.Auto)]
-        public static extern int SetWindowPos(IntPtr hWnd, IntPtr hWndAfter, int X, int Y, int Width, int Height, FlagsSetWindowPos flags);
+        public static extern int SetWindowPos(IntPtr hWnd, IntPtr hWndAfter, int x, int y, int width, int height, FlagsSetWindowPos flags);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetWindowLong(IntPtr hWnd, int Index);
+        public static extern int GetWindowLong(IntPtr hWnd, int index);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern int SetWindowLong(IntPtr hWnd, int Index, int Value);
+        public static extern int SetWindowLong(IntPtr hWnd, int index, int value);
 
         [DllImport("user32.dll", CharSet=CharSet.Auto)]
         public static extern int ShowScrollBar(IntPtr hWnd, int wBar, int bShow);
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.DockPanel
         public delegate IntPtr HookProc(int code, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SetWindowsHookEx(HookType code, HookProc func, IntPtr hInstance, int threadID);
+        public static extern IntPtr SetWindowsHookEx(HookType code, HookProc func, IntPtr hInstance, int threadId);
 
         [DllImport("user32.dll")]
         public static extern int UnhookWindowsHookEx(IntPtr hhook);

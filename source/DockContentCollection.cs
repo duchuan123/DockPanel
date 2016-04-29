@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace System.Windows.Forms.DockPanel
 {
     public class DockContentCollection : ReadOnlyCollection<IDockContent>
     {
-        private static List<IDockContent> _emptyList = new List<IDockContent>(0);
+        private static readonly List<IDockContent> _emptyList = new List<IDockContent>(0);
 
         internal DockContentCollection()
             : base(new List<IDockContent>())
@@ -15,14 +16,10 @@ namespace System.Windows.Forms.DockPanel
         internal DockContentCollection(DockPane pane)
             : base(_emptyList)
         {
-            m_dockPane = pane;
+            DockPane = pane;
         }
 
-        private DockPane m_dockPane;
-        private DockPane DockPane
-        {
-            get { return m_dockPane; }
-        }
+        private DockPane DockPane { get; }
 
         public new IDockContent this[int index] => DockPane == null ? Items[index] : GetVisibleContent(index);
 
@@ -97,13 +94,7 @@ namespace System.Windows.Forms.DockPanel
                     throw new InvalidOperationException();
 #endif
 
-                int count = 0;
-                foreach (IDockContent content in DockPane.Contents)
-                {
-                    if (content.DockHandler.DockState == DockPane.DockState)
-                        count++;
-                }
-                return count;
+                return DockPane.Contents.Count(content => content.DockHandler.DockState == DockPane.DockState);
             }
         }
 

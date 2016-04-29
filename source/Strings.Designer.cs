@@ -115,7 +115,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The size to display the content in auto hide mode. Value &lt; 1 to specify the size in portion; value &gt;= 1 to specify the size in pixel..
+        ///   Looks up a localized string similar to The size to display the content in auto hide mode. value &lt; 1 to specify the size in portion; value &gt;= 1 to specify the size in pixel..
         /// </summary>
         internal static string DockContent_AutoHidePortion_Description {
             get {
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Value: The value of DockAreas conflicts with current DockState..
+        ///   Looks up a localized string similar to Invalid value: The value of DockAreas conflicts with current DockState..
         /// </summary>
         internal static string DockContentHandler_DockAreas_InvalidValue {
             get {
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Index: The index is out of range..
+        ///   Looks up a localized string similar to Invalid index: The index is out of range..
         /// </summary>
         internal static string DockPane_SetContentIndex_InvalidIndex {
             get {
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the bottom docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
+        ///   Looks up a localized string similar to Size of the bottom docking window. value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
         internal static string DockPanel_DockBottomPortion_Description {
             get {
@@ -592,7 +592,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the left docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
+        ///   Looks up a localized string similar to Size of the left docking window. value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
         internal static string DockPanel_DockLeftPortion_Description {
             get {
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the right docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
+        ///   Looks up a localized string similar to Size of the right docking window. value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
         internal static string DockPanel_DockRightPortion_Description {
             get {
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the top docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
+        ///   Looks up a localized string similar to Size of the top docking window. value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
         internal static string DockPanel_DockTopPortion_Description {
             get {
@@ -633,15 +633,6 @@ namespace System.Windows.Forms.DockPanel {
         internal static string DockPanel_DocumentDragged_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DocumentDragged_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The style of the document window..
-        /// </summary>
-        internal static string DockPanel_DocumentStyle_Description {
-            get {
-                return ResourceManager.GetString("DockPanel_DocumentStyle_Description", resourceCulture);
             }
         }
         
@@ -673,7 +664,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML file format is invalid..
+        ///   Looks up a localized string similar to The xML file format is invalid..
         /// </summary>
         internal static string DockPanel_LoadFromXml_InvalidXmlFormat {
             get {
@@ -718,7 +709,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Index: The index is out of range..
+        ///   Looks up a localized string similar to Invalid index: The index is out of range..
         /// </summary>
         internal static string DockPanel_SetPaneIndex_InvalidIndex {
             get {
@@ -799,7 +790,7 @@ namespace System.Windows.Forms.DockPanel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Index: The index is out of range..
+        ///   Looks up a localized string similar to Invalid index: The index is out of range..
         /// </summary>
         internal static string FloatWindow_SetPaneIndex_InvalidIndex {
             get {

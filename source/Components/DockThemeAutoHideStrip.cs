@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 
 namespace System.Windows.Forms.DockPanel
 {
@@ -40,11 +41,13 @@ namespace System.Windows.Forms.DockPanel
             {
                 if (_stringFormatTabHorizontal == null)
                 {
-                    _stringFormatTabHorizontal = new StringFormat();
-                    _stringFormatTabHorizontal.Alignment = StringAlignment.Near;
-                    _stringFormatTabHorizontal.LineAlignment = StringAlignment.Center;
-                    _stringFormatTabHorizontal.FormatFlags = StringFormatFlags.NoWrap;
-                    _stringFormatTabHorizontal.Trimming = StringTrimming.None;
+                    _stringFormatTabHorizontal = new StringFormat
+                    {
+                        Alignment = StringAlignment.Near,
+                        LineAlignment = StringAlignment.Center,
+                        FormatFlags = StringFormatFlags.NoWrap,
+                        Trimming = StringTrimming.None
+                    };
                 }
 
                 if (RightToLeft == RightToLeft.Yes)
@@ -63,11 +66,13 @@ namespace System.Windows.Forms.DockPanel
             {
                 if (_stringFormatTabVertical == null)
                 {
-                    _stringFormatTabVertical = new StringFormat();
-                    _stringFormatTabVertical.Alignment = StringAlignment.Near;
-                    _stringFormatTabVertical.LineAlignment = StringAlignment.Center;
-                    _stringFormatTabVertical.FormatFlags = StringFormatFlags.NoWrap | StringFormatFlags.DirectionVertical;
-                    _stringFormatTabVertical.Trimming = StringTrimming.None;
+                    _stringFormatTabVertical = new StringFormat
+                    {
+                        Alignment = StringAlignment.Near,
+                        LineAlignment = StringAlignment.Center,
+                        FormatFlags = StringFormatFlags.NoWrap | StringFormatFlags.DirectionVertical,
+                        Trimming = StringTrimming.None
+                    };
                 }
                 if (RightToLeft == RightToLeft.Yes)
                     _stringFormatTabVertical.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
@@ -242,7 +247,7 @@ namespace System.Windows.Forms.DockPanel
             Rectangle rectTab = GetTabRectangle(tab, transformed);
             if (rtlTransform)
                 rectTab = RtlTransform(rectTab, dockState);
-            bool upTab = (dockState == DockState.DockLeftAutoHide || dockState == DockState.DockBottomAutoHide);
+            bool upTab = dockState == DockState.DockLeftAutoHide || dockState == DockState.DockBottomAutoHide;
             DrawHelper.GetRoundedCornerTab(GraphicsPath, rectTab, upTab);
 
             return GraphicsPath;
@@ -331,13 +336,13 @@ namespace System.Windows.Forms.DockPanel
             var topPanes = GetPanes(DockState.DockTopAutoHide).Count;
             var bottomPanes = GetPanes(DockState.DockBottomAutoHide).Count;
 
-            int x, y, width, height;
+            int x, y, width;
 
-            height = MeasureHeight();
+            var height = MeasureHeight();
             if (dockState == DockState.DockLeftAutoHide && leftPanes > 0)
             {
                 x = 0;
-                y = (topPanes == 0) ? 0 : height;
+                y = topPanes == 0 ? 0 : height;
                 width = Height - (topPanes == 0 ? 0 : height) - (bottomPanes == 0 ? 0 : height);
             }
             else if (dockState == DockState.DockRightAutoHide && rightPanes > 0)
@@ -345,7 +350,7 @@ namespace System.Windows.Forms.DockPanel
                 x = Width - height;
                 if (leftPanes != 0 && x < height)
                     x = height;
-                y = (topPanes == 0) ? 0 : height;
+                y = topPanes == 0 ? 0 : height;
                 width = Height - (topPanes == 0 ? 0 : height) - (bottomPanes == 0 ? 0 : height);
             }
             else if (dockState == DockState.DockTopAutoHide && topPanes > 0)
@@ -416,25 +421,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected override IDockContent HitTest(Point point)
         {
-            foreach (DockState state in DockStates)
-            {
-                Rectangle rectTabStrip = GetLogicalTabStripRectangle(state, true);
-                if (!rectTabStrip.Contains(point))
-                    continue;
-
-                foreach (Pane pane in GetPanes(state))
-                {
-                    foreach (var tab1 in pane.AutoHideTabs)
-                    {
-                        var tab = (TabVS2005) tab1;
-                        var path = GetTabOutline(tab, true, true);
-                        if (path.IsVisible(point))
-                            return tab.Content;
-                    }
-                }
-            }
-
-            return null;
+            return (from state in DockStates let rectTabStrip = GetLogicalTabStripRectangle(state, true) where rectTabStrip.Contains(point) from pane in GetPanes(state) from tab1 in pane.AutoHideTabs select (TabVS2005) tab1 into tab let path = GetTabOutline(tab, true, true) where path.IsVisible(point) select tab.Content).FirstOrDefault();
         }
 
         protected override Rectangle GetTabBounds(Tab tab)

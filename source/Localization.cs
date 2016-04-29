@@ -5,7 +5,7 @@ namespace System.Windows.Forms.DockPanel
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class LocalizedDescriptionAttribute : DescriptionAttribute
     {
-        private bool m_initialized;
+        private bool _mInitialized;
 
         public LocalizedDescriptionAttribute(string key) : base(key)
         {
@@ -15,11 +15,11 @@ namespace System.Windows.Forms.DockPanel
         {
             get
             {
-                if (m_initialized) return DescriptionValue;
+                if (_mInitialized) return DescriptionValue;
                 var key = base.Description;
                 DescriptionValue = ResourceHelper.GetString(key) ?? string.Empty;
 
-                m_initialized = true;
+                _mInitialized = true;
 
                 return DescriptionValue;
             }

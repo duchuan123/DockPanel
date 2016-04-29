@@ -28,29 +28,24 @@ namespace System.Windows.Forms.DockPanel
 
         public class SplitterControlBase : Control, ISplitterDragSource
         {
-            DockPane m_pane;
-
             public SplitterControlBase(DockPane pane)
             {
                 SetStyle(ControlStyles.Selectable, false);
-                m_pane = pane;
+                DockPane = pane;
             }
 
-            public DockPane DockPane
-            {
-                get { return m_pane; }
-            }
+            public DockPane DockPane { get; }
 
-            private DockAlignment m_alignment;
+            private DockAlignment _mAlignment;
             public DockAlignment Alignment
             {
-                get { return m_alignment; }
+                get { return _mAlignment; }
                 set
                 {
-                    m_alignment = value;
-                    if (m_alignment == DockAlignment.Left || m_alignment == DockAlignment.Right)
+                    _mAlignment = value;
+                    if (_mAlignment == DockAlignment.Left || _mAlignment == DockAlignment.Right)
                         Cursor = Cursors.VSplit;
-                    else if (m_alignment == DockAlignment.Top || m_alignment == DockAlignment.Bottom)
+                    else if (_mAlignment == DockAlignment.Top || _mAlignment == DockAlignment.Bottom)
                         Cursor = Cursors.HSplit;
                     else
                         Cursor = Cursors.Default;
@@ -131,21 +126,14 @@ namespace System.Windows.Forms.DockPanel
 
             #region IDragSource Members
 
-            Control IDragSource.DragControl
-            {
-                get { return this; }
-            }
+            Control IDragSource.DragControl => this;
 
             #endregion
 
             #endregion
         }
-        
-        private SplitterControlBase m_splitter;
-        private SplitterControlBase Splitter
-        {
-            get { return m_splitter; }
-        }
+
+        private SplitterControlBase Splitter { get; set; }
 
         internal Rectangle SplitterBounds
         {

@@ -9,16 +9,13 @@ namespace System.Windows.Forms.DockPanel
     [ToolboxItem(false)]
     public partial class DockWindow : Panel, INestedPanesContainer, ISplitterDragSource
     {
-        private DockPanel m_dockPanel;
-        private DockState m_dockState;
-        private SplitterBase m_splitter;
-        private NestedPaneCollection m_nestedPanes;
+        private readonly SplitterBase _mSplitter;
 
         internal DockWindow(DockPanel dockPanel, DockState dockState)
         {
-            m_nestedPanes = new NestedPaneCollection(this);
-            m_dockPanel = dockPanel;
-            m_dockState = dockState;
+            NestedPanes = new NestedPaneCollection(this);
+            DockPanel = dockPanel;
+            DockState = dockState;
             Visible = false;
 
             SuspendLayout();
@@ -26,27 +23,27 @@ namespace System.Windows.Forms.DockPanel
             if (DockState == DockState.DockLeft || DockState == DockState.DockRight ||
                 DockState == DockState.DockTop || DockState == DockState.DockBottom)
             {
-                m_splitter = DockPanel.Extender.DockWindowSplitterControlFactory.CreateSplitterControl();
-                Controls.Add(m_splitter);
+                _mSplitter = DockPanel.Extender.DockWindowSplitterControlFactory.CreateSplitterControl();
+                Controls.Add(_mSplitter);
             }
 
             switch (DockState)
             {
                 case DockState.DockLeft:
                     Dock = DockStyle.Left;
-                    m_splitter.Dock = DockStyle.Right;
+                    _mSplitter.Dock = DockStyle.Right;
                     break;
                 case DockState.DockRight:
                     Dock = DockStyle.Right;
-                    m_splitter.Dock = DockStyle.Left;
+                    _mSplitter.Dock = DockStyle.Left;
                     break;
                 case DockState.DockTop:
                     Dock = DockStyle.Top;
-                    m_splitter.Dock = DockStyle.Bottom;
+                    _mSplitter.Dock = DockStyle.Bottom;
                     break;
                 case DockState.DockBottom:
                     Dock = DockStyle.Bottom;
-                    m_splitter.Dock = DockStyle.Top;
+                    _mSplitter.Dock = DockStyle.Top;
                     break;
                 case DockState.Document:
                     Dock = DockStyle.Fill;
@@ -72,35 +69,17 @@ namespace System.Windows.Forms.DockPanel
             ResumeLayout();
         }
 
-        public VisibleNestedPaneCollection VisibleNestedPanes
-        {
-            get { return NestedPanes.VisibleNestedPanes; }
-        }
+        public VisibleNestedPaneCollection VisibleNestedPanes => NestedPanes.VisibleNestedPanes;
 
-        public NestedPaneCollection NestedPanes
-        {
-            get { return m_nestedPanes; }
-        }
+        public NestedPaneCollection NestedPanes { get; }
 
-        public DockPanel DockPanel
-        {
-            get { return m_dockPanel; }
-        }
+        public DockPanel DockPanel { get; }
 
-        public DockState DockState
-        {
-            get { return m_dockState; }
-        }
+        public DockState DockState { get; }
 
-        public bool IsFloat
-        {
-            get { return DockState == DockState.Float; }
-        }
+        public bool IsFloat => DockState == DockState.Float;
 
-        internal DockPane DefaultPane
-        {
-            get { return VisibleNestedPanes.Count == 0 ? null : VisibleNestedPanes[0]; }
-        }
+        internal DockPane DefaultPane => VisibleNestedPanes.Count == 0 ? null : VisibleNestedPanes[0];
 
         public Rectangle DisplayingRectangle
         {
@@ -162,28 +141,21 @@ namespace System.Windows.Forms.DockPanel
         {
         }
 
-        bool ISplitterDragSource.IsVertical
-        {
-            get { return (DockState == DockState.DockLeft || DockState == DockState.DockRight); }
-        }
+        bool ISplitterDragSource.IsVertical => DockState == DockState.DockLeft || DockState == DockState.DockRight;
 
         Rectangle ISplitterDragSource.DragLimitBounds
         {
             get
             {
-                Rectangle rectLimit = DockPanel.DockArea;
-                Point location;
-                if ((Control.ModifierKeys & Keys.Shift) == 0)
-                    location = Location;
-                else
-                    location = DockPanel.DockArea.Location;
+                var rectLimit = DockPanel.DockArea;
+                var location = (ModifierKeys & Keys.Shift) == 0 ? Location : DockPanel.DockArea.Location;
 
                 if (((ISplitterDragSource) this).IsVertical)
                 {
                     rectLimit.X += MeasurePane.MinSize;
                     rectLimit.Width -= 2*MeasurePane.MinSize;
                     rectLimit.Y = location.Y;
-                    if ((Control.ModifierKeys & Keys.Shift) == 0)
+                    if ((ModifierKeys & Keys.Shift) == 0)
                         rectLimit.Height = Height;
                 }
                 else
@@ -191,7 +163,7 @@ namespace System.Windows.Forms.DockPanel
                     rectLimit.Y += MeasurePane.MinSize;
                     rectLimit.Height -= 2*MeasurePane.MinSize;
                     rectLimit.X = location.X;
-                    if ((Control.ModifierKeys & Keys.Shift) == 0)
+                    if ((ModifierKeys & Keys.Shift) == 0)
                         rectLimit.Width = Width;
                 }
 
@@ -201,7 +173,7 @@ namespace System.Windows.Forms.DockPanel
 
         void ISplitterDragSource.MoveSplitter(int offset)
         {
-            if ((Control.ModifierKeys & Keys.Shift) != 0)
+            if ((ModifierKeys & Keys.Shift) != 0)
                 SendToBack();
 
             Rectangle rectDockArea = DockPanel.DockArea;
@@ -237,10 +209,7 @@ namespace System.Windows.Forms.DockPanel
 
         #region IDragSource Members
 
-        Control IDragSource.DragControl
-        {
-            get { return this; }
-        }
+        Control IDragSource.DragControl => this;
 
         #endregion
 

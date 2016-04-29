@@ -174,10 +174,7 @@ namespace System.Windows.Forms.DockPanel
         }
 
         [Browsable(false)]
-        public bool IsActivated
-        {
-            get	{	return DockHandler.IsActivated;	}
-        }
+        public bool IsActivated => DockHandler.IsActivated;
 
         public bool IsDockStateValid(DockState dockState)
         {
@@ -297,9 +294,8 @@ namespace System.Windows.Forms.DockPanel
         }
         protected virtual void OnDockStateChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[DockStateChangedEvent];
-            if (handler != null)
-                handler(this, e);
+            var handler = (EventHandler)Events[DockStateChangedEvent];
+            handler?.Invoke(this, e);
         }
         #endregion
 

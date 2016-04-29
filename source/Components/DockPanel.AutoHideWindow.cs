@@ -8,8 +8,8 @@ namespace System.Windows.Forms.DockPanel
         {
             public DefaultAutoHideWindowControl(DockPanel dockPanel) : base(dockPanel)
             {
-                m_splitter = new SplitterControl(this);
-                Controls.Add(m_splitter);
+                MSplitter = new SplitterControl(this);
+                Controls.Add(MSplitter);
             }
 
             protected override void OnLayout(LayoutEventArgs levent)
@@ -18,22 +18,22 @@ namespace System.Windows.Forms.DockPanel
                 if (DockState == DockState.DockLeftAutoHide)
                 {
                     DockPadding.Right = 2;
-                    m_splitter.Dock = DockStyle.Right;
+                    MSplitter.Dock = DockStyle.Right;
                 }
                 else if (DockState == DockState.DockRightAutoHide)
                 {
                     DockPadding.Left = 2;
-                    m_splitter.Dock = DockStyle.Left;
+                    MSplitter.Dock = DockStyle.Left;
                 }
                 else if (DockState == DockState.DockTopAutoHide)
                 {
                     DockPadding.Bottom = 2;
-                    m_splitter.Dock = DockStyle.Bottom;
+                    MSplitter.Dock = DockStyle.Bottom;
                 }
                 else if (DockState == DockState.DockBottomAutoHide)
                 {
                     DockPadding.Top = 2;
-                    m_splitter.Dock = DockStyle.Top;
+                    MSplitter.Dock = DockStyle.Top;
                 }
 
                 Rectangle rectDisplaying = DisplayingRectangle;
@@ -45,10 +45,7 @@ namespace System.Windows.Forms.DockPanel
                         continue;
 
 
-                    if (pane == ActivePane)
-                        pane.Bounds = rectDisplaying;
-                    else
-                        pane.Bounds = rectHidden;
+                    pane.Bounds = pane == ActivePane ? rectDisplaying : rectHidden;
                 }
 
                 base.OnLayout(levent);
@@ -84,19 +81,12 @@ namespace System.Windows.Forms.DockPanel
             {
                 public SplitterControl(AutoHideWindowControl autoHideWindow)
                 {
-                    m_autoHideWindow = autoHideWindow;
+                    AutoHideWindow = autoHideWindow;
                 }
 
-                private AutoHideWindowControl m_autoHideWindow;
-                private AutoHideWindowControl AutoHideWindow
-                {
-                    get { return m_autoHideWindow; }
-                }
+                private AutoHideWindowControl AutoHideWindow { get; }
 
-                protected override int SplitterSize
-                {
-                    get { return Measures.SplitterSize; }
-                }
+                protected override int SplitterSize => Measures.SplitterSize;
 
                 protected override void StartDrag()
                 {
@@ -108,15 +98,15 @@ namespace System.Windows.Forms.DockPanel
             private const int ANIMATE_TIME = 100;    // in mini-seconds
             #endregion
 
-            private Timer m_timerMouseTrack;
-            protected SplitterBase m_splitter;
+            private readonly Timer _mTimerMouseTrack;
+            protected SplitterBase MSplitter;
 
             public AutoHideWindowControl(DockPanel dockPanel)
             {
-                m_dockPanel = dockPanel;
+                DockPanel = dockPanel;
 
-                m_timerMouseTrack = new Timer();
-                m_timerMouseTrack.Tick += TimerMouseTrack_Tick;
+                _mTimerMouseTrack = new Timer();
+                _mTimerMouseTrack.Tick += TimerMouseTrack_Tick;
 
                 Visible = false;
             }
@@ -125,30 +115,23 @@ namespace System.Windows.Forms.DockPanel
             {
                 if (disposing)
                 {
-                    m_timerMouseTrack.Dispose();
+                    _mTimerMouseTrack.Dispose();
                 }
                 base.Dispose(disposing);
             }
 
-            private DockPanel m_dockPanel;
-            public DockPanel DockPanel
-            {
-                get { return m_dockPanel; }
-            }
+            public DockPanel DockPanel { get; }
 
-            private DockPane m_activePane;
-            public DockPane ActivePane
-            {
-                get { return m_activePane; }
-            }
+            public DockPane ActivePane { get; private set; }
+
             private void SetActivePane()
             {
-                DockPane value = ActiveContent?.DockHandler.Pane;
+                var value = ActiveContent?.DockHandler.Pane;
 
-                if (value != null && value == m_activePane)
+                if (value != null && value == ActivePane)
                     return;
 
-                m_activePane = value;
+                ActivePane = value;
             }
 
             private static readonly object ActiveContentChangedEvent = new object();
@@ -160,18 +143,17 @@ namespace System.Windows.Forms.DockPanel
 
             protected virtual void OnActiveContentChanged(EventArgs e)
             {
-                EventHandler handler = (EventHandler)Events[ActiveContentChangedEvent];
-                if (handler != null)
-                    handler(this, e);
+                var handler = (EventHandler)Events[ActiveContentChangedEvent];
+                handler?.Invoke(this, e);
             }
 
-            private IDockContent m_activeContent;
+            private IDockContent _mActiveContent;
             public IDockContent ActiveContent
             {
-                get { return m_activeContent; }
+                get { return _mActiveContent; }
                 set
                 {
-                    if (value == m_activeContent)
+                    if (value == _mActiveContent)
                         return;
 
                     if (value != null)
@@ -182,25 +164,25 @@ namespace System.Windows.Forms.DockPanel
 
                     DockPanel.SuspendLayout();
 
-                    if (m_activeContent != null)
+                    if (_mActiveContent != null)
                     {
-                        if (m_activeContent.DockHandler.Form.ContainsFocus)
+                        if (_mActiveContent.DockHandler.Form.ContainsFocus)
                         {
                             if (!Win32Helper.IsRunningOnMono)
                             {
-                                DockPanel.ContentFocusManager.GiveUpFocus(m_activeContent);
+                                DockPanel.ContentFocusManager.GiveUpFocus(_mActiveContent);
                             }
                         }
 
                         AnimateWindow(false);
                     }
 
-                    m_activeContent = value;
+                    _mActiveContent = value;
                     SetActivePane();
                     if (ActivePane != null)
-                        ActivePane.ActiveContent = m_activeContent;
+                        ActivePane.ActiveContent = _mActiveContent;
 
-                    if (m_activeContent != null)
+                    if (_mActiveContent != null)
                         AnimateWindow(true);
 
                     DockPanel.ResumeLayout();
@@ -212,28 +194,20 @@ namespace System.Windows.Forms.DockPanel
                 }
             }
 
-            public DockState DockState
-            {
-                get { return ActiveContent == null ? DockState.Unknown : ActiveContent.DockHandler.DockState; }
-            }
+            public DockState DockState => ActiveContent?.DockHandler.DockState ?? DockState.Unknown;
 
-            private bool m_flagAnimate = true;
-            private bool FlagAnimate
-            {
-                get { return m_flagAnimate; }
-                set { m_flagAnimate = value; }
-            }
+            private bool FlagAnimate { get; set; } = true;
 
-            private bool m_flagDragging;
+            private bool _mFlagDragging;
             internal bool FlagDragging
             {
-                get { return m_flagDragging; }
+                get { return _mFlagDragging; }
                 set
                 {
-                    if (m_flagDragging == value)
+                    if (_mFlagDragging == value)
                         return;
 
-                    m_flagDragging = value;
+                    _mFlagDragging = value;
                     SetTimerMouseTrack();
                 }
             }
@@ -250,9 +224,9 @@ namespace System.Windows.Forms.DockPanel
 
                 Rectangle rectSource = GetRectangle(!show);
                 Rectangle rectTarget = GetRectangle(show);
-                int dxLoc, dyLoc;
+                int dyLoc;
                 int dWidth, dHeight;
-                dxLoc = dyLoc = dWidth = dHeight = 0;
+                var dxLoc = dyLoc = dWidth = dHeight = 0;
                 if (DockState == DockState.DockTopAutoHide)
                     dHeight = show ? 1 : -1;
                 else if (DockState == DockState.DockLeftAutoHide)
@@ -270,7 +244,7 @@ namespace System.Windows.Forms.DockPanel
 
                 if (show)
                 {
-                    Bounds = DockPanel.GetAutoHideWindowBounds(new Rectangle(-rectTarget.Width, -rectTarget.Height, rectTarget.Width, rectTarget.Height));
+                    Bounds = new Rectangle(-rectTarget.Width, -rectTarget.Height, rectTarget.Width, rectTarget.Height);
                     if (Visible == false)
                         Visible = true;
                     PerformLayout();
@@ -306,8 +280,7 @@ namespace System.Windows.Forms.DockPanel
                         rectSource.Height = rectTarget.Height;
 
                     LayoutAnimateWindow(rectSource);
-                    if (Parent != null)
-                        Parent.Update();
+                    Parent?.Update();
 
                     remainPixels -= speedFactor;
 
@@ -333,7 +306,7 @@ namespace System.Windows.Forms.DockPanel
 
             private void LayoutAnimateWindow(Rectangle rect)
             {
-                Bounds = DockPanel.GetAutoHideWindowBounds(rect);
+                Bounds = rect;
 
                 Rectangle rectClient = ClientRectangle;
 
@@ -375,7 +348,7 @@ namespace System.Windows.Forms.DockPanel
             {
                 if (ActivePane == null || ActivePane.IsActivated || FlagDragging)
                 {
-                    m_timerMouseTrack.Enabled = false;
+                    _mTimerMouseTrack.Enabled = false;
                     return;
                 }
 
@@ -386,8 +359,8 @@ namespace System.Windows.Forms.DockPanel
                 if (hovertime <= 0)
                     hovertime = 400;
 
-                m_timerMouseTrack.Interval = 2 * hovertime;
-                m_timerMouseTrack.Enabled = true;
+                _mTimerMouseTrack.Interval = 2 * hovertime;
+                _mTimerMouseTrack.Enabled = true;
             }
 
             protected virtual Rectangle DisplayingRectangle
@@ -441,7 +414,7 @@ namespace System.Windows.Forms.DockPanel
 
                 if (ActivePane == null || ActivePane.IsActivated)
                 {
-                    m_timerMouseTrack.Enabled = false;
+                    _mTimerMouseTrack.Enabled = false;
                     return;
                 }
 
@@ -454,7 +427,7 @@ namespace System.Windows.Forms.DockPanel
                 if (!ClientRectangle.Contains(ptMouseInAutoHideWindow) && !rectTabStrip.Contains(ptMouseInDockPanel))
                 {
                     ActiveContent = null;
-                    m_timerMouseTrack.Enabled = false;
+                    _mTimerMouseTrack.Enabled = false;
                 }
             }
 
@@ -470,10 +443,7 @@ namespace System.Windows.Forms.DockPanel
                 FlagDragging = false;
             }
 
-            bool ISplitterDragSource.IsVertical
-            {
-                get { return DockState == DockState.DockLeftAutoHide || DockState == DockState.DockRightAutoHide; }
-            }
+            bool ISplitterDragSource.IsVertical => DockState == DockState.DockLeftAutoHide || DockState == DockState.DockRightAutoHide;
 
             Rectangle ISplitterDragSource.DragLimitBounds
             {
@@ -532,25 +502,16 @@ namespace System.Windows.Forms.DockPanel
 
             #region IDragSource Members
 
-            Control IDragSource.DragControl
-            {
-                get { return this; }
-            }
+            Control IDragSource.DragControl => this;
 
             #endregion
 
             #endregion
         }
 
-        private AutoHideWindowControl AutoHideWindow
-        {
-            get { return m_autoHideWindow; }
-        }
+        private AutoHideWindowControl AutoHideWindow { get; set; }
 
-        internal Control AutoHideControl
-        {
-            get { return m_autoHideWindow; }
-        }
+        internal Control AutoHideControl => AutoHideWindow;
 
         internal void RefreshActiveAutoHideContent()
         {
@@ -622,10 +583,6 @@ namespace System.Windows.Forms.DockPanel
 
         internal Rectangle GetAutoHideWindowBounds(Rectangle rectAutoHideWindow)
         {
-            if (DocumentStyle == DocumentStyle.SystemMdi ||
-                DocumentStyle == DocumentStyle.DockingMdi)
-                return (Parent == null) ? Rectangle.Empty : Parent.RectangleToClient(RectangleToScreen(rectAutoHideWindow));
-            else
                 return rectAutoHideWindow;
         }
 

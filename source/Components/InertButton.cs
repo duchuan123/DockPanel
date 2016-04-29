@@ -274,7 +274,7 @@ namespace System.Windows.Forms.DockPanel
             {
                 if (m_toolTipText == value) return;
                 if (m_toolTip == null)
-                    m_toolTip = new ToolTip(this.components);
+                    m_toolTip = new ToolTip(components);
                 m_toolTipText = value;
                 m_toolTip.SetToolTip(this, value);
             }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.DockPanel
             base.OnMouseMove(mevent);
 
             // Is mouse point inside our client rectangle
-            bool over = this.ClientRectangle.Contains(new Point(mevent.X, mevent.Y));
+            bool over = ClientRectangle.Contains(new Point(mevent.X, mevent.Y));
 
             // If entering the button area or leaving the button area...
             if (over != m_mouseOver)
@@ -428,19 +428,19 @@ namespace System.Windows.Forms.DockPanel
                 colorMap[0] = new ColorMap
                 {
                     OldColor = Color.White,
-                    NewColor = this.BackColor
+                    NewColor = BackColor
                 };
                 colorMap[1] = new ColorMap
                 {
                     OldColor = Color.Black,
-                    NewColor = this.ForeColor
+                    NewColor = ForeColor
                 };
                 imageAttr.SetRemapTable(colorMap);
             }
 
             Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
 
-            if ((!Enabled) && (null == ImageDisabled))
+            if (!Enabled && (null == ImageDisabled))
             {
                 using (Bitmap bitmapMono = new Bitmap(image, ClientRectangle.Size))
                 {
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.DockPanel
                             gMono.DrawImage(image, new[] { new Point(0, 0), new Point(image.Width - 1, 0), new Point(0, image.Height - 1) }, rect, GraphicsUnit.Pixel, imageAttr);
                         }
                     }
-                    ControlPaint.DrawImageDisabled(g, bitmapMono, 0, 0, this.BackColor);
+                    ControlPaint.DrawImageDisabled(g, bitmapMono, 0, 0, BackColor);
                 }
             }
             else
@@ -459,8 +459,8 @@ namespace System.Windows.Forms.DockPanel
                 // Three points provided are upper-left, upper-right and 
                 // lower-left of the destination parallelogram. 
                 Point[] pts = new Point[3];
-                pts[0].X = (Enabled && m_mouseOver && m_mouseCapture) ? 1 : 0;
-                pts[0].Y = (Enabled && m_mouseOver && m_mouseCapture) ? 1 : 0;
+                pts[0].X = Enabled && m_mouseOver && m_mouseCapture ? 1 : 0;
+                pts[0].Y = Enabled && m_mouseOver && m_mouseCapture ? 1 : 0;
                 pts[1].X = pts[0].X + ClientRectangle.Width;
                 pts[1].Y = pts[0].Y;
                 pts[2].X = pts[0].X;
@@ -544,7 +544,7 @@ namespace System.Windows.Forms.DockPanel
             ButtonBorderStyle bs;
 
             // Decide on the type of border to draw around image
-            if (!this.Enabled)
+            if (!Enabled)
                 bs = IsPopup ? ButtonBorderStyle.Outset : ButtonBorderStyle.Solid;
             else if (m_mouseOver && m_mouseCapture)
                 bs = ButtonBorderStyle.Inset;
@@ -557,20 +557,20 @@ namespace System.Windows.Forms.DockPanel
             Color colorRightBottom;
             if (bs == ButtonBorderStyle.Solid)
             {
-                colorLeftTop = this.BackColor;
-                colorRightBottom = this.BackColor;
+                colorLeftTop = BackColor;
+                colorRightBottom = BackColor;
             }
             else if (bs == ButtonBorderStyle.Outset)
             {
-                colorLeftTop = m_borderColor.IsEmpty ? this.BackColor : m_borderColor;
-                colorRightBottom = this.BackColor;
+                colorLeftTop = m_borderColor.IsEmpty ? BackColor : m_borderColor;
+                colorRightBottom = BackColor;
             }
             else
             {
-                colorLeftTop = this.BackColor;
-                colorRightBottom = m_borderColor.IsEmpty ? this.BackColor : m_borderColor;
+                colorLeftTop = BackColor;
+                colorRightBottom = m_borderColor.IsEmpty ? BackColor : m_borderColor;
             }
-            ControlPaint.DrawBorder(g, this.ClientRectangle,
+            ControlPaint.DrawBorder(g, ClientRectangle,
                 colorLeftTop, m_borderWidth, bs,
                 colorLeftTop, m_borderWidth, bs,
                 colorRightBottom, m_borderWidth, bs,
