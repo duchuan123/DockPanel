@@ -286,7 +286,23 @@ namespace System.Windows.Forms.DockPanel
         private string _mTabText;
         public string TabText
         {
-            get { return string.IsNullOrEmpty(_mTabText) ? Form.Text : _mTabText; }
+            get
+            {
+                if (!string.IsNullOrEmpty(_mTabText)) return _mTabText;
+
+                if (string.IsNullOrEmpty(Form.Text))
+                    return "   ";
+
+                var tex = Form.Text;
+                var len = Form.Text.Length;
+                while (len < 3)
+                {
+                    tex += " ";
+                    len++;
+                }
+
+                return tex;
+            }
             set
             {
                 if (_mTabText == value)
