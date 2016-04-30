@@ -188,7 +188,7 @@ namespace System.Windows.Forms.DockPanel
             {
                 foreach (var tab1 in pane.AutoHideTabs)
                 {
-                    var tab = (TabVS2005) tab1;
+                    var tab = (TabVS2005)tab1;
                     DrawTab(g, tab);
                 }
             }
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.DockPanel
             {
                 foreach (var tab1 in pane.AutoHideTabs)
                 {
-                    var tab = (TabVS2005) tab1;
+                    var tab = (TabVS2005)tab1;
                     var width = imageWidth + ImageGapLeft + ImageGapRight +
                         TextRenderer.MeasureText(tab.Content.DockHandler.TabText, TextFont).Width +
                         TextGapLeft + TextGapRight;
@@ -274,44 +274,48 @@ namespace System.Windows.Forms.DockPanel
             {
                 g.Transform = MatrixIdentity;
 
-                // Draw the icon
-                Rectangle rectImage = rectTabOrigin;
-                rectImage.X += ImageGapLeft;
-                rectImage.Y += ImageGapTop;
-                int imageHeight = rectTabOrigin.Height - ImageGapTop - ImageGapBottom;
-                int imageWidth = ImageWidth;
-                if (imageHeight > ImageHeight)
-                    imageWidth = ImageWidth * (imageHeight / ImageHeight);
-                rectImage.Height = imageHeight;
-                rectImage.Width = imageWidth;
-                rectImage = GetTransformedRectangle(dockState, rectImage);
-
-                if (dockState == DockState.DockLeftAutoHide || dockState == DockState.DockRightAutoHide)
+                int imageWidth = 0;
+                if (((Form)content).ShowIcon)
                 {
-                    // The DockState is DockLeftAutoHide or DockRightAutoHide, so rotate the image 90 degrees to the right. 
-                    Rectangle rectTransform = RtlTransform(rectImage, dockState);
-                    Point[] rotationPoints =
-                        { 
-                            new Point(rectTransform.X + rectTransform.Width, rectTransform.Y), 
-                            new Point(rectTransform.X + rectTransform.Width, rectTransform.Y + rectTransform.Height), 
-                            new Point(rectTransform.X, rectTransform.Y)
-                        };
+                    // Draw the icon
+                    Rectangle rectImage = rectTabOrigin;
+                    rectImage.X += ImageGapLeft;
+                    rectImage.Y += ImageGapTop;
+                    var imageHeight = rectTabOrigin.Height - ImageGapTop - ImageGapBottom;
+                    imageWidth = ImageWidth;
+                    if (imageHeight > ImageHeight)
+                        imageWidth = ImageWidth * (imageHeight / ImageHeight);
+                    rectImage.Height = imageHeight;
+                    rectImage.Width = imageWidth;
+                    rectImage = GetTransformedRectangle(dockState, rectImage);
 
-                    using (Icon rotatedIcon = new Icon(((Form)content).Icon, 16, 16))
+                    if (dockState == DockState.DockLeftAutoHide || dockState == DockState.DockRightAutoHide)
                     {
-                        g.DrawImage(rotatedIcon.ToBitmap(), rotationPoints);
+                        // The DockState is DockLeftAutoHide or DockRightAutoHide, so rotate the image 90 degrees to the right. 
+                        Rectangle rectTransform = RtlTransform(rectImage, dockState);
+                        Point[] rotationPoints =
+                        {
+                        new Point(rectTransform.X + rectTransform.Width, rectTransform.Y),
+                        new Point(rectTransform.X + rectTransform.Width, rectTransform.Y + rectTransform.Height),
+                        new Point(rectTransform.X, rectTransform.Y)
+                    };
+
+                        using (Icon rotatedIcon = new Icon(((Form)content).Icon, 16, 16))
+                        {
+                            g.DrawImage(rotatedIcon.ToBitmap(), rotationPoints);
+                        }
                     }
-                }
-                else
-                {
-                    // Draw the icon normally without any rotation.
-                    g.DrawIcon(((Form)content).Icon, RtlTransform(rectImage, dockState));
+                    else
+                    {
+                        // Draw the icon normally without any rotation.
+                        g.DrawIcon(((Form)content).Icon, RtlTransform(rectImage, dockState));
+                    }
                 }
 
                 // Draw the text
                 Rectangle rectText = rectTabOrigin;
                 rectText.X += ImageGapLeft + imageWidth + ImageGapRight + TextGapLeft;
-                rectText.Width -= ImageGapLeft + imageWidth + ImageGapRight + TextGapLeft;
+                rectText.Width -= ImageGapLeft + imageWidth + ImageGapRight + TextGapLeft + 4;
                 rectText = RtlTransform(GetTransformedRectangle(dockState, rectText), dockState);
 
                 Color textColor = DockPanel.Skin.AutoHideStripSkin.TabGradient.TextColor;
@@ -421,7 +425,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected override IDockContent HitTest(Point point)
         {
-            return (from state in DockStates let rectTabStrip = GetLogicalTabStripRectangle(state, true) where rectTabStrip.Contains(point) from pane in GetPanes(state) from tab1 in pane.AutoHideTabs select (TabVS2005) tab1 into tab let path = GetTabOutline(tab, true, true) where path.IsVisible(point) select tab.Content).FirstOrDefault();
+            return (from state in DockStates let rectTabStrip = GetLogicalTabStripRectangle(state, true) where rectTabStrip.Contains(point) from pane in GetPanes(state) from tab1 in pane.AutoHideTabs select (TabVS2005)tab1 into tab let path = GetTabOutline(tab, true, true) where path.IsVisible(point) select tab.Content).FirstOrDefault();
         }
 
         protected override Rectangle GetTabBounds(Tab tab)
