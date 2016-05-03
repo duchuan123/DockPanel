@@ -996,7 +996,13 @@ namespace System.Windows.Forms.DockPanel
 
         private IDockContent GetFirstContent(DockState dockState)
         {
-            return DisplayingContents.FirstOrDefault(content => content.DockHandler.IsDockStateValid(dockState));
+            for (int i = 0; i < DisplayingContents.Count; i++)
+            {
+                IDockContent content = DisplayingContents[i];
+                if (content.DockHandler.IsDockStateValid(dockState))
+                    return content;
+            }
+            return null;
         }
 
         public void RestoreToPanel()

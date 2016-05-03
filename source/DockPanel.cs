@@ -42,13 +42,21 @@ namespace System.Windows.Forms.DockPanel
             AutoHideWindow.ActiveContentChanged += m_autoHideWindow_ActiveContentChanged;
             SetAutoHideWindowParent();
 
-            DummyControl = new DummyControl {Bounds = new Rectangle(0, 0, 1, 1)};
+            DummyControl = new DummyControl { Bounds = new Rectangle(0, 0, 1, 1) };
             Controls.Add(DummyControl);
 
             LoadDockWindows();
 
             DummyContent = new DockContent();
             ResumeLayout();
+
+            ContentAdded += ContentAddedForeColor;
+        }
+
+        private void ContentAddedForeColor(object sender, DockContentEventArgs e)
+        {
+            if (ThemeForceForeColor)
+                e.Content.DockHandler.Form.BackColor = ThemeForeColor;
         }
 
         private Color _mBackColor;
@@ -56,15 +64,15 @@ namespace System.Windows.Forms.DockPanel
         /// Determines the color with which the client rectangle will be drawn.
         /// If this property is used instead of the BackColor it will not have any influence on the borders to the surrounding controls (DockPane).
         /// The BackColor property changes the borders of surrounding controls (DockPane).
-        /// Alternatively both properties may be used (BackColor to draw and define the color of the borders and DockBackColor to define the color of the client rectangle). 
-        /// For Backgroundimages: Set your prefered Image, then set the DockBackColor and the BackColor to the same Color (Control)
+        /// Alternatively both properties may be used (BackColor to draw and define the color of the borders and ThemeBackColor to define the color of the client rectangle). 
+        /// For Backgroundimages: Set your prefered Image, then set the ThemeBackColor and the BackColor to the same Color (Control)
         /// </summary>
         [Description("Determines the color with which the client rectangle will be drawn.\r\n" +
             "If this property is used instead of the BackColor it will not have any influence on the borders to the surrounding controls (DockPane).\r\n" +
             "The BackColor property changes the borders of surrounding controls (DockPane).\r\n" +
-            "Alternatively both properties may be used (BackColor to draw and define the color of the borders and DockBackColor to define the color of the client rectangle).\r\n" +
-            "For Backgroundimages: Set your prefered Image, then set the DockBackColor and the BackColor to the same Color (Control).")]
-        public Color DockBackColor
+            "Alternatively both properties may be used (BackColor to draw and define the color of the borders and ThemeBackColor to define the color of the client rectangle).\r\n" +
+            "For Backgroundimages: Set your prefered Image, then set the ThemeBackColor and the BackColor to the same Color (Control).")]
+        public Color ThemeBackColor
         {
             get
             {
@@ -80,14 +88,45 @@ namespace System.Windows.Forms.DockPanel
             }
         }
 
-        private bool ShouldSerializeDockBackColor()
+        /// <summary>
+        /// "Force ThemeColor on all DockContent attached to this panel."
+        /// </summary>
+        [Description("Force ThemeColor on all DockContent attached to this panel.")]
+        public bool ThemeForceForeColor { get; set; } = true;
+        private Color _mForeColor;
+        /// <summary>
+        /// Determines the color all DockContent backcolors will change to.
+        /// </summary>
+        [Description("Determines the color all DockContent backcolors will change to.")]
+        public Color ThemeForeColor
+        {
+            get
+            {
+                return !_mForeColor.IsEmpty ? _mForeColor : BackColor;
+            }
+            set
+            {
+                if (_mForeColor != value)
+                {
+                    _mForeColor = value;
+
+                    if (ThemeForceForeColor)
+                        foreach (var c in this.Contents)
+                            c.DockHandler.Form.BackColor = ThemeForeColor;
+
+                    Refresh();
+                }
+            }
+        }
+
+        private bool ShouldSerializeThemeBackColor()
         {
             return !_mBackColor.IsEmpty;
         }
 
-        private void ResetDockBackColor()
+        private void ResetThemeBackColor()
         {
-            DockBackColor = Color.Empty;
+            ThemeBackColor = Color.Empty;
         }
 
         private AutoHideStripBase _mAutoHideStripControl;
@@ -470,8 +509,8 @@ namespace System.Windows.Forms.DockPanel
             if (dockState == DockState.DockLeft || dockState == DockState.DockRight)
             {
                 int width = ClientRectangle.Width - DockPadding.Left - DockPadding.Right;
-                int dockLeftSize = _mDockLeftPortion >= 1 ? (int) _mDockLeftPortion : (int) (width*_mDockLeftPortion);
-                int dockRightSize = _mDockRightPortion >= 1 ? (int) _mDockRightPortion : (int) (width*_mDockRightPortion);
+                int dockLeftSize = _mDockLeftPortion >= 1 ? (int)_mDockLeftPortion : (int)(width * _mDockLeftPortion);
+                int dockRightSize = _mDockRightPortion >= 1 ? (int)_mDockRightPortion : (int)(width * _mDockRightPortion);
 
                 if (dockLeftSize < MeasurePane.MinSize)
                     dockLeftSize = MeasurePane.MinSize;
@@ -481,8 +520,8 @@ namespace System.Windows.Forms.DockPanel
                 if (dockLeftSize + dockRightSize > width - MeasurePane.MinSize)
                 {
                     int adjust = dockLeftSize + dockRightSize - (width - MeasurePane.MinSize);
-                    dockLeftSize -= adjust/2;
-                    dockRightSize -= adjust/2;
+                    dockLeftSize -= adjust / 2;
+                    dockRightSize -= adjust / 2;
                 }
 
                 return dockState == DockState.DockLeft ? dockLeftSize : dockRightSize;
@@ -490,8 +529,8 @@ namespace System.Windows.Forms.DockPanel
             else if (dockState == DockState.DockTop || dockState == DockState.DockBottom)
             {
                 int height = ClientRectangle.Height - DockPadding.Top - DockPadding.Bottom;
-                int dockTopSize = _mDockTopPortion >= 1 ? (int) _mDockTopPortion : (int) (height*_mDockTopPortion);
-                int dockBottomSize = _mDockBottomPortion >= 1 ? (int) _mDockBottomPortion : (int) (height*_mDockBottomPortion);
+                int dockTopSize = _mDockTopPortion >= 1 ? (int)_mDockTopPortion : (int)(height * _mDockTopPortion);
+                int dockBottomSize = _mDockBottomPortion >= 1 ? (int)_mDockBottomPortion : (int)(height * _mDockBottomPortion);
 
                 if (dockTopSize < MeasurePane.MinSize)
                     dockTopSize = MeasurePane.MinSize;
@@ -501,8 +540,8 @@ namespace System.Windows.Forms.DockPanel
                 if (dockTopSize + dockBottomSize > height - MeasurePane.MinSize)
                 {
                     int adjust = dockTopSize + dockBottomSize - (height - MeasurePane.MinSize);
-                    dockTopSize -= adjust/2;
-                    dockBottomSize -= adjust/2;
+                    dockTopSize -= adjust / 2;
+                    dockBottomSize -= adjust / 2;
                 }
 
                 return dockState == DockState.DockTop ? dockTopSize : dockBottomSize;
@@ -542,10 +581,10 @@ namespace System.Windows.Forms.DockPanel
         {
             base.OnPaint(e);
 
-            if (DockBackColor == BackColor) return;
+            if (ThemeBackColor == BackColor) return;
 
             Graphics g = e.Graphics;
-            SolidBrush bgBrush = new SolidBrush(DockBackColor);
+            SolidBrush bgBrush = new SolidBrush(ThemeBackColor);
             g.FillRectangle(bgBrush, ClientRectangle);
         }
 
@@ -725,7 +764,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected virtual void OnActiveAutoHideContentChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler) Events[ActiveAutoHideContentChangedEvent];
+            EventHandler handler = (EventHandler)Events[ActiveAutoHideContentChangedEvent];
             handler?.Invoke(this, e);
         }
 
@@ -747,7 +786,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected virtual void OnContentAdded(DockContentEventArgs e)
         {
-            EventHandler<DockContentEventArgs> handler = (EventHandler<DockContentEventArgs>) Events[ContentAddedEvent];
+            EventHandler<DockContentEventArgs> handler = (EventHandler<DockContentEventArgs>)Events[ContentAddedEvent];
             handler?.Invoke(this, e);
         }
 
@@ -763,7 +802,7 @@ namespace System.Windows.Forms.DockPanel
 
         protected virtual void OnContentRemoved(DockContentEventArgs e)
         {
-            EventHandler<DockContentEventArgs> handler = (EventHandler<DockContentEventArgs>) Events[ContentRemovedEvent];
+            EventHandler<DockContentEventArgs> handler = (EventHandler<DockContentEventArgs>)Events[ContentRemovedEvent];
             handler?.Invoke(this, e);
         }
 
