@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Description("Force ThemeColor on all DockContent attached to this panel.")]
         [Category("Theme")]
-        public bool ForceTheme = true;
+        public bool ForceTheme { get; set; }= true;
 
         #region Main Colors
         private Color _mBackColor;
