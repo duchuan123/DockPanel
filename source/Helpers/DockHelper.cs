@@ -1,8 +1,8 @@
 using System.Drawing;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
-    public static class DockHelper
+    internal static class DockHelper
     {
         public static bool IsDockStateAutoHide(DockState dockState)
         {

@@ -7,7 +7,7 @@
     <ProjectGuid>{CE0257ED-630C-4416-A0AF-145752A93B54}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.Windows.Forms.DockPanel</RootNamespace>
+    <RootNamespace>System.Windows.Forms</RootNamespace>
     <AssemblyName>DockPanel</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -39,55 +39,43 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\AutoHideStripBase.cs">
+    <Compile Include="Components\AutoHideStrip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPaneCaptionBase.cs">
+    <Compile Include="Components\DockPaneCaption.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.Appearance.cs">
+    <Compile Include="DockPanel\DockPanel.Appearance.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.AutoHideWindow.cs">
+    <Compile Include="DockPanel\DockPanel.AutoHideWindow.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.DockDragHandler.cs">
+    <Compile Include="DockPanel\DockPanel.DockDragHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.DragHandler.cs">
+    <Compile Include="DockPanel\DockPanel.DragHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.FocusManager.cs">
+    <Compile Include="DockPanel\DockPanel.FocusManager.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.MdiClientController.cs">
+    <Compile Include="DockPanel\DockPanel.MdiClientController.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.Persistor.cs">
+    <Compile Include="DockPanel\DockPanel.Persistor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPanel.SplitterDragHandler.cs">
+    <Compile Include="DockPanel\DockPanel.SplitterDragHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockPaneStripBase.cs">
+    <Compile Include="Components\DockPaneStrip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\DockTheme.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\DockThemeAutoHideStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\DockThemePaneCaption.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\DockThemePaneStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Components\DockWindow.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\DockWindow.SplitterControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\DummyControl.cs">
@@ -102,38 +90,38 @@
     <Compile Include="Components\SplitterBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DockAreasEditor.cs" />
-    <Compile Include="DockContent.cs">
+    <Compile Include="Misc\DockAreasEditor.cs" />
+    <Compile Include="Forms\DockContent.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DockContentCollection.cs" />
-    <Compile Include="DockContentEventArgs.cs" />
-    <Compile Include="DockContentHandler.cs" />
-    <Compile Include="DockOutlineBase.cs" />
-    <Compile Include="DockPaneCollection.cs" />
-    <Compile Include="DockPanel.cs" />
-    <Compile Include="DockPanelExtender.cs" />
-    <Compile Include="DockPanelSkin.cs" />
-    <Compile Include="DockWindowCollection.cs" />
-    <Compile Include="DragForm.cs">
+    <Compile Include="Misc\DockContentCollection.cs" />
+    <Compile Include="Misc\DockContentEventArgs.cs" />
+    <Compile Include="Misc\DockContentHandler.cs" />
+    <Compile Include="Misc\DockOutlineBase.cs" />
+    <Compile Include="Misc\DockPaneCollection.cs" />
+    <Compile Include="DockPanel\DockPanel.cs" />
+    <Compile Include="Misc\DockPanelExtender.cs" />
+    <Compile Include="Misc\DockPanelSkin.cs" />
+    <Compile Include="Misc\DockWindowCollection.cs" />
+    <Compile Include="Forms\DragForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DrawingRoutines.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="FloatWindow.cs">
+    <Compile Include="Misc\DrawingRoutines.cs" />
+    <Compile Include="Misc\Enums.cs" />
+    <Compile Include="Forms\FloatWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FloatWindowCollection.cs" />
+    <Compile Include="Misc\FloatWindowCollection.cs" />
     <Compile Include="Helpers\DockHelper.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\Win32Helper.cs" />
-    <Compile Include="Interfaces.cs" />
-    <Compile Include="ITheme.cs" />
-    <Compile Include="Localization.cs" />
-    <Compile Include="Measures.cs" />
-    <Compile Include="NestedDockingStatus.cs" />
-    <Compile Include="NestedPaneCollection.cs" />
+    <Compile Include="Misc\Interfaces.cs" />
+    <Compile Include="Misc\ITheme.cs" />
+    <Compile Include="Misc\Localization.cs" />
+    <Compile Include="Misc\Measures.cs" />
+    <Compile Include="Misc\NestedDockingStatus.cs" />
+    <Compile Include="Misc\NestedPaneCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,7 +139,7 @@
     <Compile Include="User Controls\DockPane.SplitterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="VisibleNestedPaneCollection.cs" />
+    <Compile Include="Misc\VisibleNestedPaneCollection.cs" />
     <Compile Include="Win32\Enums.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
   </ItemGroup>

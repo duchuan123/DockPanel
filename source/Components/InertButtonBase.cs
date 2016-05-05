@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     public abstract class InertButtonBase : Control
     {

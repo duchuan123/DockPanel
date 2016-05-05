@@ -1,4 +1,4 @@
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     internal class DummyControl : Control
     {

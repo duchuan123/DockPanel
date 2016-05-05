@@ -4,7 +4,7 @@ using System.Security.Permissions;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     [ToolboxItem(false)]
     public partial class DockPane : UserControl, IDockDragSource
@@ -36,9 +36,9 @@ namespace System.Windows.Forms.DockPanel
             }
         }
 
-        private DockPaneCaptionBase CaptionControl { get; set; }
+        private DockPaneCaption CaptionControl { get; set; }
 
-        public DockPaneStripBase TabStripControl { get; private set; }
+        public DockPaneStrip TabStripControl { get; private set; }
 
         protected internal DockPane(IDockContent content, DockState visibleState, bool show)
         {

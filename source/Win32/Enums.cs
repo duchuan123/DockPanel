@@ -1,4 +1,4 @@
-namespace System.Windows.Forms.DockPanel.Win32
+namespace System.Windows.Forms.Win32
 {
     [Flags]
     internal enum FlagsSetWindowPos : uint

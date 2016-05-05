@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.ComponentModel;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     internal class InertButton : Button
     {

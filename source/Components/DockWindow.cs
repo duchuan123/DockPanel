@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.ComponentModel;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     /// <summary>
     /// Dock window base class.
@@ -9,6 +9,18 @@ namespace System.Windows.Forms.DockPanel
     [ToolboxItem(false)]
     public partial class DockWindow : Panel, INestedPanesContainer, ISplitterDragSource
     {
+        internal class DefaultSplitterControl : SplitterBase
+        {
+            protected override int SplitterSize => Measures.SplitterSize;
+
+            protected override void StartDrag()
+            {
+                var window = Parent as DockWindow;
+
+                window?.DockPanel.BeginDrag(window, window.RectangleToScreen(Bounds));
+            }
+        }
+
         private readonly SplitterBase _mSplitter;
 
         internal DockWindow(DockPanel dockPanel, DockState dockState)

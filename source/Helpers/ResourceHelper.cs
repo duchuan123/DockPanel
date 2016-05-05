@@ -1,6 +1,6 @@
 using System.Resources;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     internal static class ResourceHelper
     {
@@ -8,7 +8,7 @@ namespace System.Windows.Forms.DockPanel
 
         private static ResourceManager ResourceManager => _resourceManager ??
                                                           (_resourceManager =
-                                                              new ResourceManager("System.Windows.Forms.DockPanel.Strings",
+                                                              new ResourceManager("System.Windows.Forms.Strings",
                                                                   typeof (ResourceHelper).Assembly));
 
         public static string GetString(string name)

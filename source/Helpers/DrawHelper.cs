@@ -1,9 +1,9 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
-    public static class DrawHelper
+    internal static class DrawHelper
     {
         public static Point RtlTransform(Control control, Point point)
         {

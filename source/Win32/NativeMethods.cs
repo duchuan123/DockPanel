@@ -1,9 +1,9 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms.DockPanel.Win32;
+using System.Windows.Forms.Win32;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     internal static class NativeMethods
     {

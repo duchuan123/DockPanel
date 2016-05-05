@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     [ToolboxItem(false)]
     public class SplitterBase : Control

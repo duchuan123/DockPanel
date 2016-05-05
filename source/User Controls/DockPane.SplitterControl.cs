@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace System.Windows.Forms.DockPanel
+namespace System.Windows.Forms
 {
     partial class DockPane
     {
