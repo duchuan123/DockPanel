@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.TextColor = settings.InActiveDocumentTabTextColor;
 
             skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.StartColor = settings.ToolTabStripStartColor;
-            skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.EndColor = settings.ToolTabStripStartColor;
+            skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.EndColor = settings.ToolTabStripEndColor;
 
             skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.StartColor = settings.ActiveToolTabStartColor;
             skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.EndColor = settings.ActiveToolTabEndColor;

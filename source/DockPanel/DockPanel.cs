@@ -501,7 +501,7 @@ namespace System.Windows.Forms
             {
                 if (_mActiveToolCaptionStartColor == value) return;
                 _mActiveToolCaptionStartColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.StartColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.StartColor = value;
                 Refresh();
             }
         }
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
             {
                 if (_mActiveToolCaptionEndColor == value) return;
                 _mActiveToolCaptionEndColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.EndColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.EndColor = value;
                 Refresh();
             }
         }
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
             {
                 if (_mActiveToolCaptionTextColor == value) return;
                 _mActiveToolCaptionTextColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.TextColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.TextColor = value;
                 Refresh();
             }
         }
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
             {
                 if (_mInActiveToolCaptionStartColor == value) return;
                 _mInActiveToolCaptionStartColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.StartColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.StartColor = value;
                 Refresh();
             }
         }
@@ -593,7 +593,7 @@ namespace System.Windows.Forms
             {
                 if (_mInActiveToolCaptionEndColor == value) return;
                 _mInActiveToolCaptionEndColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.EndColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.EndColor = value;
                 Refresh();
             }
         }
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             {
                 if (_mInActiveToolCaptionTextColor == value) return;
                 _mInActiveToolCaptionTextColor = value;
-                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.TextColor = value;
+                Skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.TextColor = value;
                 Refresh();
             }
         }
